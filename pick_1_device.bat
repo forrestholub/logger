@@ -15,7 +15,6 @@ set device4_from_file=""
 SET count=1
 SET use_device=""
 SET use_device_properties=""
-SET "ANDROID_SERIAL=%use_device%"
 
 REM --------------------- Main Actions -----------------------------------------------------
 for /f "Skip=1 tokens=1" %%G in ('adb devices') DO ( CALL :subroutine %%G )

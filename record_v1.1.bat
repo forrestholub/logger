@@ -33,7 +33,7 @@ ping -n 1 127.0.0.1 > NUL
 REM SET --bit-rate to 4MB -- time limit to 60 seconds -- also show-clock
 echo Recording in progress...
 START cmd /K CALL video_integrity %dev_serial%
-adb -d -s %1 screenrecord --bit-rate 4000000 --bugreport --time-limit 60 /sdcard/video.mp4
+adb -d -s %1 shell screenrecord --bit-rate 4000000 --bugreport --time-limit 60 /sdcard/video.mp4
 IF %ERRORLEVEL% EQU 1 ( SET ERRORLEVEL=0 , GOTO :RESTART_RECORDING )
 echo Use [/C] to stop recording. If reached max record time, press any button to pull video...
 pause>Nul
