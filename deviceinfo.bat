@@ -12,6 +12,9 @@ SET yourself=%0
 
 FOR /F "tokens=1 delims=" %%A in ('adb -d get-serialno') do SET serial=%%A
 
+REM check for issues with device connecting to ADB
+IF "%serial%"==""  ECHO Device not connected correctly. Please try authorizing ADB or enabling ADB debugging && exit /b 1
+
 
 :MAIN
 REM [Make]: Motorola
