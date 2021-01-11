@@ -5,7 +5,6 @@ ECHO START THE ADB SERVER
 adb start-server
 
 REM -------------------paramters setup-----------------------------------------------------
-set ANDROID_SERIAL=""
 set device1=""
 set device1_from_file=""
 set device2=""
@@ -29,26 +28,15 @@ IF EXIST device_2_file.txt ECHO Device 2: %device2_properties%
 IF EXIST device_3_file.txt ECHO Device 3: %device3_properties%
 IF EXIST device_4_file.txt ECHO Device 4: %device4_properties%
 
-REM Make a choice
-@REM CHOICE /C 1234 /M "Please select device from above list"
-@REM IF "%ERRORLEVEL%"=="1" CALL :selected_device1
-@REM IF "%ERRORLEVEL%"=="2" CALL :selected_device2
-@REM IF "%ERRORLEVEL%"=="3" CALL :selected_device3
-@REM IF "%ERRORLEVEL%"=="4" CALL :selected_device4
-
-
 REM Result:
-ECHO You've selected %use_device_properties%
-IF EXIST device_1_file.txt SET "%~1=%device1_from_file%"
-IF EXIST device_2_file.txt SET "%~2=%device2_from_file%"
-IF EXIST device_3_file.txt SET "%~3=%device3_from_file%"
-IF EXIST device_4_file.txt SET "%~4=%device4_from_file%"
+IF EXIST device_1_file.txt SET "%device1_from_file%=%~1"
+IF EXIST device_2_file.txt SET "%device2_from_file%=%~2"
+IF EXIST device_3_file.txt SET "%device3_from_file%=%~3"
+IF EXIST device_4_file.txt SET "%device4_from_file%=%~4"
 exit /b 0
 
 REM ------------------------------functions begin---------------------------------------------------------------------
 :subroutine
- IF NOT "%1"=="" ECHO You are on iteration: %count%
- IF NOT "%1"=="" ECHO %count%:%1
  IF NOT "%1"=="" ECHO %1 >>device_%count%_file.txt
  set /a count+=1
 GOTO :EOF

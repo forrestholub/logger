@@ -4,7 +4,6 @@ ECHO START THE ADB SERVER
 adb start-server
 
 REM -------------------paramters setup-----------------------------------------------------
-set ANDROID_SERIAL=""
 set device1=""
 set device1_from_file=""
 set device2=""
@@ -16,6 +15,7 @@ set device4_from_file=""
 SET count=1
 SET use_device=""
 SET use_device_properties=""
+SET "ANDROID_SERIAL=%use_device%"
 
 REM --------------------- Main Actions -----------------------------------------------------
 for /f "Skip=1 tokens=1" %%G in ('adb devices') DO ( CALL :subroutine %%G )
@@ -29,7 +29,7 @@ IF EXIST device_3_file.txt ECHO Selection 3: %device3_properties%
 IF EXIST device_4_file.txt ECHO Selection 4: %device4_properties%
 
 REM Make a choice
-CHOICE /C 1234 /M "Please select device from above list"
+CHOICE /C 1234 /M "Please select device to use"
 IF "%ERRORLEVEL%"=="1" CALL :selected_device1
 IF "%ERRORLEVEL%"=="2" CALL :selected_device2
 IF "%ERRORLEVEL%"=="3" CALL :selected_device3
@@ -38,13 +38,16 @@ IF "%ERRORLEVEL%"=="4" CALL :selected_device4
 
 REM Result:
 ECHO You've selected %use_device_properties%
-SET "%~1 = %use_device%"
-exit /b 0
+
+SET "%use_device%=%~1"
+
+exit /b %ERRORLEVEL%
 
 REM ------------------------------functions begin---------------------------------------------------------------------
 :subroutine
- IF NOT "%1"=="" ECHO You are on iteration: %count%
- IF NOT "%1"=="" ECHO %count%:%1
+ REM FIRST TWO WERE USED IN DEBUGGING 
+ REM IF NOT "%1"=="" ECHO You are on iteration: %count%
+ REM IF NOT "%1"=="" ECHO %count%:%1
  IF NOT "%1"=="" ECHO %1 >>device_%count%_file.txt
  set /a count+=1
 GOTO :EOF
