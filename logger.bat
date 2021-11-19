@@ -9,11 +9,11 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 
 ::CMDlet locations
 
-SET deviceinfo="%cd%\Cmdlets\"deviceinfo.bat
-SET logging_all="%cd%\Cmdlets\"logging_all.bat
-SET record="%cd%\Cmdlets\"record.bat
-SET repro="%cd%\Cmdlets\"repro.bat
-SET screenshot="%cd%\Cmdlets\"screenshot.bat
+SET deviceinfo=%~dp0Cmdlets\deviceinfo.bat
+SET logging_all=%~dp0Cmdlets\logging_all.bat
+SET record=%~dp0Cmdlets\record.bat
+SET repro=%~dp0Cmdlets\repro.bat
+SET screenshot=%~dp0Cmdlets\screenshot.bat
 
 :setup
 IF "%1"=="/?" (
@@ -146,7 +146,7 @@ CHOICE /C 135 /N /M "Select reason for test: [1]New Failure Log -- [3]Retest Log
 
 IF %ERRORLEVEL% EQU 1 SET test=TC-
 IF %ERRORLEVEL% EQU 2 SET test=IKSWQ-
-IF %ERRORLEVEL% EQU 3 SET test=Exploratory-
+IF %ERRORLEVEL% EQU 3 SET test=Issue-
 
 
 :: test if I can set test value successfully and append to logname
@@ -244,28 +244,28 @@ ping -n 2 127.0.0.1 > NUL
 
 :: now we start logging 
 adb -d wait-for-device
-CALL deviceinfo.bat
+CALL %deviceinfo%
 
 echo START REPRODUCTION TEXT
-START CALL repro.bat
+START CALL %repro%
 
 ping -n 1 127.0.0.1 > NUL
 ECHO Clear previous logs
 
-START CALL adb logcat -c
+START /D "%cd%\AP_Logs\" CALL adb logcat -c
 
 ECHO START AP LOGS (minimized)
 ECHO %logging_all%
-START CALL %logging_all%
+START /D "%cd%\AP_Logs\" CALL %logging_all%
 
 ping -1 2 127.0.0.1 > NUL
 ECHO START VIDEO RECORDING
 ECHO %record%
-START CALL %record%
+START /D "%cd%\Videos\" CALL %record%
 
 ping -1 2 127.0.0.1 > NUL
 ECHO START SCREENSHOT CAPTURE
-START CALL %screenshot%
+START /D "%cd%\Screenshots\" CALL %screenshot%
 
 exit /b 0
 
