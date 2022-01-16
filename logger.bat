@@ -7,6 +7,9 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 ::Company: Arclight Wireless
 ::Copywrite: MIT Open Source License
 
+:: lib path:
+SET seven_zip=%~dp0Programs\7-Zip\7z.exe
+
 ::CMDlet locations
 
 SET deviceinfo=%~dp0Cmdlets\deviceinfo.bat
@@ -141,17 +144,9 @@ IF "%imei%"=="" (
 exit /b 0
 
 :build_folder
-
-CHOICE /C 135 /N /M "Select reason for test: [1]New Failure Log -- [3]Retest Log -- [5] Other	-- will leave blank"
-
-IF %ERRORLEVEL% EQU 1 SET test=TC-
-IF %ERRORLEVEL% EQU 2 SET test=IKSWQ-
-IF %ERRORLEVEL% EQU 3 SET test=Issue-
-
-
 :: test if I can set test value successfully and append to logname
 :: also test to see if tc number can be appended using input request below
-SET log-name-incomplete=%log-time%_%device%-%last_four_imei%_%test%
+SET log-name-incomplete=%log-time%_%device%-%last_four_imei%_
 
 ECHO Complete this log name: %log-name-incomplete%  _____________
 SET /p detail= "":
@@ -191,7 +186,6 @@ SET /P "loglocation=Which directory is the log file in? ":
 IF "%loglocation%"=="1" (
 	echo pulling from data files
 	adb pull /data/vendor/bug2go/ 
-	adb shell rm -r /data/vendor/bug2go/*
 )	
 IF "%loglocation%"=="2" (
 	echo pulling from device storage
@@ -201,17 +195,27 @@ IF "%loglocation%"=="2" (
 	cd additional-mdm-logs
 	echo pulling extra diag mdm logs
 	adb pull /data/vendor/diag_mdlog/logs
-	adb shell rm -r /storage/emulated/0/Android/data/com.motorola.bug2go/files/*
-	adb shell rm -r /data/vendor/diag_mdlog/logs/*
-
+)
 IF "%loglocation%"=="3" (
 	mkdir additional-mdm-logs
 	cd additional-mdm-logs
 	echo pulling extra diag mdm logs
 	adb pull /data/vendor/diag_mdlog/logs
-	adb shell rm -r /data/vendor/diag_mdlog/logs/*
-)	
+)
 
+ECHO. Log Removal
+ECHO. 1 - Yes
+ECHO. 0 - No
+SET /P "remove_device=Remove those logs from device? ":
+IF "%remove_device%"=="1" (
+	adb shell rm -r /data/vendor/bug2go/*
+	adb shell rm -r /storage/emulated/0/Android/data/com.motorola.bug2go/files/*
+	adb shell rm -r /data/vendor/diag_mdlog/logs/*
+	adb shell rm -r /data/vendor/diag_mdlog/logs/*
+)
+IF "%remove_device%"=="0" (
+	ECHO Nothing removed from device..
+)
 :: shhhh just pull it all baby
 adb pull /sdcard/pictures/screenshots/
 adb shell rm -r /sdcard/pictures/screenshots/*
@@ -271,7 +275,7 @@ exit /b 0
 
 :zippy
 cd ..
-C:\"Program Files"\7-Zip\7z.exe a -tzip %~1.zip "%cd%\"%~1\*
+%seven_zip% a -tzip %~1.zip "%cd%\"%~1\*
 GOTO :END
 
 

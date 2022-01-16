@@ -146,71 +146,71 @@ REM ICCID ----11 (ICCID)-
 FOR /F "skip=1 tokens=2,3,4,5,6,7,8,9 delims='.)" %%i IN ('adb -s %serial% shell service call iphonesubinfo 11') DO <NUL SET /P result=%%i%%j%%k%%l%%m%%n%%o%%p>>temp.txt
 IF EXIST temp.txt FOR /F "tokens=1 delims= " %%i IN (temp.txt) DO SET iccid1=%%i
 FOR %%? IN (temp.txt) DO ( SET strlength=%%~z?)
-if "%strlength%"=="20" ( SET iccid=%iccid1%)
+if "%strlength%" gtr "14" ( SET iccid=%iccid1%)
 IF EXIST temp.txt del temp.txt 2>&1>NUL
 
 REM ICCID ----12 (ICCID)-
 FOR /F "skip=1 tokens=2,3,4,5,6,7,8,9 delims='.)" %%i IN ('adb -s %serial% shell service call iphonesubinfo 12') DO <NUL SET /P result=%%i%%j%%k%%l%%m%%n%%o%%p>>temp.txt
 IF EXIST temp.txt FOR /F "tokens=1 delims= " %%i IN (temp.txt) DO SET iccid2=%%i
 FOR %%? IN (temp.txt) DO ( SET strlength=%%~z?)
-if "%strlength%"=="20" ( SET iccid=%iccid2%)
+if "%strlength%" gtr "14" ( SET iccid=%iccid2%)
 IF EXIST temp.txt del temp.txt 2>&1>NUL
 
 REM ICCID ----13 (ICCID)-
 FOR /F "skip=1 tokens=2,3,4,5,6,7,8,9 delims='.)" %%i IN ('adb -s %serial% shell service call iphonesubinfo 13') DO <NUL SET /P result=%%i%%j%%k%%l%%m%%n%%o%%p>>temp.txt
 IF EXIST temp.txt FOR /F "tokens=1 delims= " %%i IN (temp.txt) DO SET iccid3=%%i
 FOR %%? IN (temp.txt) DO ( SET strlength=%%~z?)
-if "%strlength%"=="20" ( SET iccid=%iccid3%)
+if "%strlength%" gtr "14" ( SET iccid=%iccid3%)
 IF EXIST temp.txt del temp.txt 2>&1>NUL
 
 REM ICCID ----14 (ICCID)-
 FOR /F "skip=1 tokens=2,3,4,5,6,7,8,9 delims='.)" %%i IN ('adb -s %serial% shell service call iphonesubinfo 14') DO <NUL SET /P result=%%i%%j%%k%%l%%m%%n%%o%%p>>temp.txt
 IF EXIST temp.txt FOR /F "tokens=1 delims= " %%i IN (temp.txt) DO SET iccid4=%%i
 FOR %%? IN (temp.txt) DO ( SET strlength=%%~z?)
-if "%strlength%"=="20" ( SET iccid=%iccid4%)
+if "%strlength%" gtr "14" ( SET iccid=%iccid4%)
 IF EXIST temp.txt del temp.txt 2>&1>NUL
-
 
 REM : MDN ----iphonesubinfo 15 (MDN)
 FOR /F "skip=1 tokens=2,3,4,5,6,7,8,9 delims='.)" %%i IN ('adb -s %serial% shell service call iphonesubinfo 15') DO <NUL SET /P result=%%i%%j%%k%%l%%m%%n%%o%%p>>temp.txt
 IF EXIST temp.txt FOR /F "tokens=1 delims= " %%i IN (temp.txt) DO SET mdn1=%%i
-FOR %%? IN (temp.txt) DO ( SET strlength=%%~z?)
-if "%strlength%"=="12" ( SET mdn=%mdn1%)
+FOR %%? IN (temp.txt) DO (SET strlength=%%~z?)
+if "%strlength%"=="" SET strlength=0
+if %strlength% gtr 8 (SET mdn=%mdn1%)
 IF EXIST temp.txt del temp.txt 2>&1>NUL
 
 REM : MDN ----iphonesubinfo 16 (MDN)
 FOR /F "skip=1 tokens=2,3,4,5,6,7,8,9 delims='.)" %%i IN ('adb -s %serial% shell service call iphonesubinfo 16') DO <NUL SET /P result=%%i%%j%%k%%l%%m%%n%%o%%p>>temp.txt
 IF EXIST temp.txt FOR /F "tokens=1 delims= " %%i IN (temp.txt) DO SET mdn2=%%i
-FOR %%? IN (temp.txt) DO ( SET strlength=%%~z?)
-if "%strlength%"=="12" ( SET mdn=%mdn2%)
+FOR %%? IN (temp.txt) DO (SET strlength=%%~z?)
+if "%strlength%" gtr "8" (SET mdn=%mdn2%)
 IF EXIST temp.txt del temp.txt 2>&1>NUL
 
 REM : MDN ----iphonesubinfo 17 (MDN)
 FOR /F "skip=1 tokens=2,3,4,5,6,7,8,9 delims='.)" %%i IN ('adb -s %serial% shell service call iphonesubinfo 17') DO <NUL SET /P result=%%i%%j%%k%%l%%m%%n%%o%%p>>temp.txt
 IF EXIST temp.txt FOR /F "tokens=1 delims= " %%i IN (temp.txt) DO SET mdn3=%%i
-FOR %%? IN (temp.txt) DO ( SET strlength=%%~z?)
-if "%strlength%"=="12" ( SET mdn=%mdn3%)
+FOR %%? IN (temp.txt) DO (SET strlength=%%~z?)
+if "%strlength%" gtr "8" (SET mdn=%mdn3%)
 IF EXIST temp.txt del temp.txt 2>&1>NUL
 
 REM : MDN ----iphonesubinfo 18 (MDN)
 FOR /F "skip=1 tokens=2,3,4,5,6,7,8,9 delims='.)" %%i IN ('adb -s %serial% shell service call iphonesubinfo 18') DO <NUL SET /P result=%%i%%j%%k%%l%%m%%n%%o%%p>>temp.txt
 IF EXIST temp.txt FOR /F "tokens=1 delims= " %%i IN (temp.txt) DO SET mdn4=%%i
-FOR %%? IN (temp.txt) DO ( SET strlength=%%~z?)
-if "%strlength%"=="12" ( SET mdn=%mdn4%)
+FOR %%? IN (temp.txt) DO (SET strlength=%%~z?)
+if "%strlength%" gtr "8" (SET mdn=%mdn4%)
 IF EXIST temp.txt del temp.txt 2>&1>NUL
 
 REM : MDN ----iphonesubinfo 19 (MDN)
 FOR /F "skip=1 tokens=2,3,4,5,6,7,8,9 delims='.)" %%i IN ('adb -s %serial% shell service call iphonesubinfo 19') DO <NUL SET /P result=%%i%%j%%k%%l%%m%%n%%o%%p>>temp.txt
 IF EXIST temp.txt FOR /F "tokens=1 delims= " %%i IN (temp.txt) DO SET mdn5=%%i
-FOR %%? IN (temp.txt) DO ( SET strlength=%%~z?)
-if "%strlength%"=="12" ( SET mdn=%mdn5%)
+FOR %%? IN (temp.txt) DO (SET strlength=%%~z?)
+if "%strlength%" gtr "8" (SET mdn=%mdn5%)
 IF EXIST temp.txt del temp.txt 2>&1>NUL
 
 REM : MDN ----iphonesubinfo 20 (MDN)
 FOR /F "skip=1 tokens=2,3,4,5,6,7,8,9 delims='.)" %%i IN ('adb -s %serial% shell service call iphonesubinfo 20') DO <NUL SET /P result=%%i%%j%%k%%l%%m%%n%%o%%p>>temp.txt
 IF EXIST temp.txt FOR /F "tokens=1 delims= " %%i IN (temp.txt) DO SET mdn6=%%i
-FOR %%? IN (temp.txt) DO ( SET strlength=%%~z?)
-if "%strlength%"=="12" ( SET mdn=%mdn6%)
+FOR %%? IN (temp.txt) DO (SET strlength=%%~z?)
+if "%strlength%" gtr "8" (SET mdn=%mdn6%)
 IF EXIST temp.txt del temp.txt 2>&1>NUL
 
 
@@ -238,36 +238,35 @@ REM IF "%mdn%"=="na" SET "mdn=%mdn1%"
 GOTO :create_sheet
 
 :create_sheet
+IF NOT "%brand%"=="" ECHO [Make]:%brand%>>Device-info_%serial%.txt 
 
-ECHO [Make]:%brand%>>Device-info_%serial%.txt 
+IF NOT "%model%"==""  ECHO [Model]:%model%>>Device-info_%serial%.txt 
 
-ECHO [Model]:%model%>>Device-info_%serial%.txt 
+IF NOT "%devicecodename%"==""  ECHO [DeviceCodeName]:%devicecodename%>>Device-info_%serial%.txt 
 
-ECHO [DeviceCodeName]:%devicecodename%>>Device-info_%serial%.txt 
+IF NOT "%product%"==""  ECHO [Product]:%product%>>Device-info_%serial%.txt 
 
-ECHO [Product]:%product%>>Device-info_%serial%.txt 
+IF NOT "%serial%"==""  ECHO [SerialNumber]:%serial%>>Device-info_%serial%.txt 
 
-ECHO [SerialNumber]:%serial%>>Device-info_%serial%.txt 
+IF NOT "%buildtag%"==""  ECHO [BuildTag]:%buildtag%>>Device-info_%serial%.txt 
 
-ECHO [BuildTag]:%buildtag%>>Device-info_%serial%.txt 
+IF NOT "%progtag%"==""  ECHO [ProgramUtag]:%progtag%>>Device-info_%serial%.txt 
 
-ECHO [ProgramUtag]:%progtag%>>Device-info_%serial%.txt 
+IF NOT "%PLMN%"==""  ECHO [PLMN]:%PLMN%>>Device-info_%serial%.txt 
 
-ECHO [PLMN]:%PLMN%>>Device-info_%serial%.txt 
+IF NOT "%hardware%"=="" ECHO [HW]:%hardware%>>Device-info_%serial%.txt 
 
-ECHO [HW]:%hardware%>>Device-info_%serial%.txt 
+IF NOT "%softwareid%"==""  ECHO [SW]:%softwareid%>>Device-info_%serial%.txt 
 
-ECHO [SW]:%softwareid%>>Device-info_%serial%.txt 
+IF NOT "%software%"==""  ECHO [Artifact]:%software%>>Device-info_%serial%.txt 
 
-ECHO [Artifact]:%software%>>Device-info_%serial%.txt 
+IF NOT "%imei%"==""  ECHO [IMEI]:%imei%>>Device-info_%serial%.txt 
 
-ECHO [IMEI]:%imei%>>Device-info_%serial%.txt 
+IF NOT "%mdn%"==""  ECHO [MDN]:%mdn%>>Device-info_%serial%.txt 
 
-ECHO [MDN]:%mdn%>>Device-info_%serial%.txt 
+IF NOT "%iccid%"==""  ECHO [ICCID]:%iccid%>>Device-info_%serial%.txt
 
-ECHO [ICCID]:%iccid%>>Device-info_%serial%.txt
-
-ECHO [IMSI]: %imsi%>>Device-info_%serial%.txt
+IF NOT "%imsi%"==""  ECHO [IMSI]: %imsi%>>Device-info_%serial%.txt
 
 REM EXTRAS---------------------------------------------------------------
 IF "%imei%"=="na" ECHO [IMEI1]:%imei1%>>Device-info_%serial%.txt 
