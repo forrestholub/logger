@@ -162,16 +162,18 @@ exit /b 0
 
 
 :PULL_LOGS
+SET /P "pull=(1)--Bug2Go, (2)--LG-on-device, (3)--Mediatek " 
 
-if "%brand%"=="motorola" (
-	GOTO :PULL_MOTO
+if "%pull%"=="1" (
+	GOTO :PULL_Bug2Go
 )
-
-if "%brand%"=="lge" (
+if "%pull%"=="2" (
 	GOTO :PULL_LG	
 )
-
-:PULL_MOTO
+if "%pull%"=="3" (
+	GOTO :PULL_MediaTek	
+)
+:PULL_Bug2Go
 adb root >NUL
 mkdir Bug2goFiles
 ping -n 2 127.0.0.1 > NUL
@@ -219,8 +221,8 @@ IF "%remove_device%"=="0" (
 :: shhhh just pull it all baby
 adb pull /sdcard/pictures/screenshots/
 adb shell rm -r /sdcard/pictures/screenshots/*
-adb pull /sdcard/videos/
-adb shell rm -r /sdcard/videos/*
+@REM adb pull /sdcard/videos/
+@REM adb shell rm -r /sdcard/videos/*
 CALL deviceinfo
 exit /b 0
 
@@ -233,9 +235,29 @@ IF (%ERRORLEVEL% EQU 1 )
 adb shell rm -r /sdcard/logger/*
 adb pull /sdcard/pictures/screenshots/
 adb shell rm -r /sdcard/pictures/screenshots/*
-adb pull /sdcard/videos/
-adb shell rm -r /sdcard/videos/*
 )
+CALL deviceinfo
+exit /b 0
+
+:PULL_MediaTek
+ECHO. Locations of log files
+ECHO. 1 - Data files
+ECHO. 2 - SD Card
+SET /P "loglocation=Which directory is the log file in? ":
+
+IF "%loglocation%"=="1" (
+	echo pulling from data files
+	adb pull /data/debuglogger/
+	IF %ERRORLEVEL% EQU 1 adb shell rm -r /data/debuglogger/* ( ELSE ECHO Something went wrong )
+)	
+IF "%loglocation%"=="2" (
+	echo pulling from device storage
+	adb pull /sdcard/debuglogger/
+	IF %ERRORLEVEL% EQU 1 adb shell rm -r /sdcard/debuglogger/* ( ELSE ECHO Something went wrong )
+)
+:: shhhh just pull it all baby
+adb pull /sdcard/pictures/screenshots/
+adb shell rm -r /sdcard/pictures/screenshots/*
 CALL deviceinfo
 exit /b 0
 
