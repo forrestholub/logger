@@ -18,6 +18,8 @@ SET record=%~dp0Cmdlets\record.bat
 SET repro=%~dp0Cmdlets\repro.bat
 SET screenshot=%~dp0Cmdlets\screenshot.bat
 
+REM MAKE SURE THE ERRORLEVEL IS SET TO 0
+CALL 
 :setup
 IF "%1"=="/?" (
 	GOTO :help
@@ -30,10 +32,11 @@ CALL :get_device_info
 CALL :determine_device
 CALL :imei
 CALL :build_folder
+Call :Both_Logs
 
-CHOICE /C yn /N /M "Are logs on device?: [y]-- YES ; [n]-- NO "
-IF %ERRORLEVEL% EQU 1 CALL :PULL_LOGS
-IF %ERRORLEVEL% EQU 2 CALL :GET_LOGS
+CHOICE /C dl /N /M "[D]On-Device Logging or [L]Laptop Logging;"
+IF %ERRORLEVEL% EQU 1 CALL :Device_Logs
+IF %ERRORLEVEL% EQU 2 CALL :Laptop_Logs
 
 CHOICE /C 17 /N /M "Press [7] to 7zip file, otherwise press [1] to exit"
 
@@ -57,8 +60,9 @@ EXIT /b 0
 	ECHO.	   LG G5 logging code		*#546368#*820#
 	ECHO. 	   LG V60 logging code		*#546368#*600#
 	ECHO. 	   LG Debug (all phones)	2777634#*# 
-	ECHO.
-	ECHO.
+	ECHO.      Mediatek logging code 	*#*#3646633#*#*
+	ECHO.	   Mediatek logging code2   #*#*873733284#*#*
+	ECHO.	   
     EXIT /b 0
 
 
@@ -161,7 +165,9 @@ SET log-name=%log-time%_%device%-%last_four_imei%_%test%%detail%
 exit /b 0
 
 
-:PULL_LOGS
+:Device_Logs
+ECHO After test case has been reproduced, click any button to continue with log pull
+pause 1>NUL
 SET /P "pull=(1)--Bug2Go, (2)--LG-on-device, (3)--Mediatek " 
 
 if "%pull%"=="1" (
@@ -244,24 +250,35 @@ ECHO. Locations of log files
 ECHO. 1 - Data files
 ECHO. 2 - SD Card
 SET /P "loglocation=Which directory is the log file in? ":
-
+CALL 
 IF "%loglocation%"=="1" (
 	echo pulling from data files
 	adb pull /data/debuglogger/
-	IF %ERRORLEVEL% EQU 1 adb shell rm -r /data/debuglogger/* ( ELSE ECHO Something went wrong )
-)	
+	IF %ERRORLEVEL% EQU 0 ( adb shell rm -r /data/debuglogger/* ) ELSE ( ECHO Unable to pull logs, something went wrong ))
 IF "%loglocation%"=="2" (
 	echo pulling from device storage
 	adb pull /sdcard/debuglogger/
-	IF %ERRORLEVEL% EQU 1 adb shell rm -r /sdcard/debuglogger/* ( ELSE ECHO Something went wrong )
-)
+	IF %ERRORLEVEL% EQU 0 ( adb shell rm -r /sdcard/debuglogger/* ) ELSE ( ECHO Unable to pull logs, something went wrong ))
 :: shhhh just pull it all baby
+CALL 
 adb pull /sdcard/pictures/screenshots/
-adb shell rm -r /sdcard/pictures/screenshots/*
+IF %ERRORLEVEL% EQU 0 ( adb shell rm -r /sdcard/pictures/screenshots/* ) ELSE ( ECHO Unable to remove screenshots )
+
 CALL deviceinfo
 exit /b 0
 
-:GET_LOGS
+:Laptop_Logs
+ping -n 1 127.0.0.1 > NUL
+ECHO Clear previous logs
+
+START /D "%cd%\AP_Logs\" CALL adb logcat -c
+
+ECHO START AP LOGS (minimized)
+ECHO %logging_all%
+START /D "%cd%\AP_Logs\" CALL %logging_all%
+exit /b 0
+
+:Both_Logs
 mkdir AP_Logs 
 mkdir Videos
 mkdir Screenshots
@@ -274,25 +291,14 @@ CALL %deviceinfo%
 
 echo START REPRODUCTION TEXT
 START CALL %repro%
-
-ping -n 1 127.0.0.1 > NUL
-ECHO Clear previous logs
-
-START /D "%cd%\AP_Logs\" CALL adb logcat -c
-
-ECHO START AP LOGS (minimized)
-ECHO %logging_all%
-START /D "%cd%\AP_Logs\" CALL %logging_all%
-
 ping -1 2 127.0.0.1 > NUL
 ECHO START VIDEO RECORDING
-ECHO %record%
+::ECHO %record%
 START /D "%cd%\Videos\" CALL %record%
 
 ping -1 2 127.0.0.1 > NUL
 ECHO START SCREENSHOT CAPTURE
 START /D "%cd%\Screenshots\" CALL %screenshot%
-
 exit /b 0
 
 :zippy
@@ -300,13 +306,8 @@ cd ..
 %seven_zip% a -tzip %~1.zip "%cd%\"%~1\*
 GOTO :END
 
-
-
 :END
 
 echo Quality is never an accident; it is always the result of intelligent effort.
 ENDLOCAL
 EXIT /B 0
-
-
-
