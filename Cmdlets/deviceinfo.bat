@@ -310,6 +310,9 @@ REM : MDN ----iphonesubinfo 19 (MDN5)
 REM : MDN ----iphonesubinfo 20 (MDN6)
 
 
+:: adding the application versions applicable
+:: i.e. chrome, message, phone, 
+
 GOTO :EOF
 
 ENDLOCAL
