@@ -280,6 +280,8 @@ CALL :get_device_info
 CALL :determine_device
 CALL :check_imei
 CALL :build_folder
+mkdir AP_Logs 
+mkdir BP_Logs
 Call :Both_Logs
 
 ping -n 1 127.0.0.1 > NUL
@@ -292,10 +294,8 @@ START /D "%cd%\AP_Logs\" CALL %logging_all%
 exit /b 0
 
 :Both_Logs
-mkdir AP_Logs 
 mkdir Videos
 mkdir Screenshots
-mkdir BP_Logs
 ping -n 2 127.0.0.1 > NUL
 
 :: now we start logging 
