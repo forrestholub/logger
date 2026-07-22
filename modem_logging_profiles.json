@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "log_type_bits": {
+    "1": "Mobile/AP log",
+    "2": "Modem log",
+    "4": "Network log",
+    "16": "GPS host log",
+    "32": "Connsys firmware log",
+    "64": "Bluetooth HCI host log"
+  },
+  "profiles": [
+    {
+      "name": "MediaTek On-device-Default",
+      "chipset": "Mediatek",
+      "enabled": true,
+      "mode": "SD",
+      "modem_type": 1,
+      "log_type_mask": 119,
+      "max_log_size_mb": 10000,
+      "storage": "internal_sd",
+      "auto_start_on_boot": false,
+      "auto_reset_on_exception": true,
+      "show_notification": true,
+      "taglog_enabled": false,
+      "device_log_root": "/data/debuglogger/mdlog1",
+      "start_timeout_seconds": 30,
+      "stop_timeout_seconds": 30,
+      "finalize_wait_seconds": 3
+    },
+    {
+      "name": "Samsung Qualcomm SilentLog (device default)",
+      "chipset": "Qualcomm",
+      "enabled": true,
+      "mode": "SD",
+      "modem_type": 1,
+      "log_type_mask": 2,
+      "max_log_size_mb": 1024,
+      "storage": "internal_sd",
+      "auto_start_on_boot": false,
+      "auto_reset_on_exception": false,
+      "show_notification": true,
+      "taglog_enabled": false,
+      "device_log_root": "/sdcard/log/cp",
+      "silentlog_profile": "default",
+      "start_timeout_seconds": 45,
+      "stop_timeout_seconds": 45,
+      "finalize_wait_seconds": 5
+    }
+  ]
+}
